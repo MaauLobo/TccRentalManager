@@ -1,0 +1,171 @@
+import Menu from '../components/Menu.vue';
+import Modal from '../components/Modal.vue';
+import '../css/Aluguel.css';
+
+
+export default {
+  components: {
+    Menu,
+    Modal,
+  },
+
+  data() {
+    return {
+      cpf: '',
+      modelo: '',
+      tempo: null,
+      alugueis: [],
+      timerIds: [], // IDs dos intervalos dos timers
+      aluguelFinalizado: null, // Aluguel que chegou ao fim do tempo
+      atualizarTimer: true, // Propriedade para controlar a atualização do timer na tabela
+    };
+  },
+
+  methods: {
+    iniciarAluguel() {
+      const aluguel = {
+        cpf: this.cpf,
+        modelo: this.modelo,
+        tempo: this.tempo,
+        timer: this.tempo * 60, // Converter minutos para segundos
+        timerDisplay: null, // Tempo formatado para exibição na tabela
+        aluguelFinalizado: false, // Flag para controlar se o aviso já foi exibido
+      };
+
+      // Adiciona o aluguel à tabela
+      this.alugueis.push(aluguel);
+
+      // Salva os dados no Local Storage
+      this.salvarDados();
+
+      // Inicia o timer regressivo para o aluguel atual
+      this.startTimer(aluguel);
+
+      // Limpar os campos do formulário após iniciar o aluguel
+      this.cpf = '';
+      this.modelo = '';
+      this.tempo = null;
+    },
+
+    startTimer(aluguel) {
+      aluguel.timerDisplay = this.formatTime(aluguel.timer); // Atualiza o tempo formatado para exibição
+
+      const timerId = setInterval(() => {
+        aluguel.timer--;
+
+        if (aluguel.timer > 0) {
+          aluguel.timerDisplay = this.formatTime(aluguel.timer);
+
+          if (this.atualizarTimer) {
+            this.$forceUpdate(); // Força a atualização da renderização do componente
+          }
+        } else {
+          clearInterval(timerId);
+          this.timerIds = this.timerIds.filter(id => id !== timerId);
+
+          if (!aluguel.aluguelFinalizado) {
+            this.aluguelFinalizado = aluguel;
+            this.$refs.modal.isOpen = true; // Abre o modal
+            this.removerAluguel(aluguel); // Remove o aluguel da tabela
+            aluguel.aluguelFinalizado = true; // Define a flag como true para indicar que o aviso foi exibido
+          }
+        }
+
+        // Salva os dados no Local Storage a cada atualização do timer
+        this.salvarDados();
+      }, 1000);
+
+      // Armazena o ID do intervalo do timer
+      this.timerIds.push(timerId);
+
+      // Adiciona um listener para o evento visibilitychange apenas se for o primeiro aluguel
+      if (this.timerIds.length === 1) {
+        document.addEventListener('visibilitychange', this.handleVisibilityChange);
+      }
+    },
+
+    handleVisibilityChange() {
+      if (!this.atualizarTimer) {
+        return;
+      }
+
+      if (document.visibilityState === 'hidden') {
+        // Se a aba não está em foco, pausa todos os timers
+        for (const timerId of this.timerIds) {
+          clearInterval(timerId);
+        }
+        this.timerIds = [];
+      } else {
+        // Se a aba voltou para foco, reinicia os timers
+        for (const aluguel of this.alugueis) {
+          this.startTimer(aluguel);
+        }
+      }
+    },
+
+    formatTime(timeInSeconds) {
+      const minutes = Math.floor(timeInSeconds / 60);
+      const seconds = timeInSeconds % 60;
+
+      const adjustedMinutes = parseInt(minutes, 10);
+
+      return `${adjustedMinutes}:${seconds.toString().padStart(2, '0')}`;
+    },
+
+    salvarDados() {
+      // Salva os dados da tabela no Local Storage
+      localStorage.setItem('alugueis', JSON.stringify(this.alugueis));
+    },
+
+    carregarDados() {
+      // Carrega os dados da tabela do Local Storage
+      const dados = localStorage.getItem('alugueis');
+      if (dados) {
+        this.alugueis = JSON.parse(dados);
+      }
+    },
+
+    removerAluguel(aluguel) {
+      const index = this.alugueis.indexOf(aluguel);
+      if (index !== -1) {
+        this.alugueis.splice(index, 1);
+      }
+    },
+
+    resetLocalStorage() {
+      localStorage.removeItem('alugueis');
+      this.alugueis = [];
+    },
+  },
+
+  mounted() {
+    // Carrega os dados da tabela ao montar o componente
+    this.carregarDados();
+
+    // Inicia os timers
+    for (const aluguel of this.alugueis) {
+      this.startTimer(aluguel);
+    }
+  },
+
+  beforeDestroy() {
+    // Limpa os intervalos dos timers e remove o listener do evento visibilitychange quando o componente for destruído
+    for (const timerId of this.timerIds) {
+      clearInterval(timerId);
+    }
+    this.timerIds = [];
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+
+    // Salva os dados no Local Storage ao sair do componente
+    this.salvarDados();
+  },
+
+  watch: {
+    '$refs.modal.isOpen': function (isOpen) {
+      this.atualizarTimer = !isOpen;
+    }
+  },
+
+  
+ 
+};

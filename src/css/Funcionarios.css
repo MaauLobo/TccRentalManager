@@ -1,0 +1,391 @@
+html {
+    padding: 0;
+    background: linear-gradient(#141e30, #243b55);
+    margin: 0;
+  }
+  body {
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+
+  /*
+  .clientes-table {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  }
+  
+  .clientes-table th,
+  .clientes-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .clientes-table th {
+    background-color: #000000;
+    
+  }*/
+
+  .funcionarios-tabela{
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .funcionarios-tabela .cabecalho {
+    background: linear-gradient(#141e30, #243b55);
+    color: #fff;
+    text-align: center;
+    height: 40px;
+    width: 89.7%;
+    display: flex;
+    margin-right: 1px;
+  }
+ 
+  .funcionarios-tabela .cabecalho p {
+    margin-top: -0.5px;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    font-size: 14px;
+    height: 20px;
+    width: 90%;
+  }
+
+  .funcionarios-tabela .cabecalho p:first-child {
+    margin: -0.5px 0 0 -0.9px;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    font-size: 14px;
+    height: 20px;
+    width: 90%;
+  }
+  .funcionarios-tabela .funcionarios{
+    overflow: hidden;
+    height: 505px;
+    overflow-y: scroll;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: -1px;
+  }
+  
+  .funcionarios-table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: transparent;
+    color: #ffffff;
+    border:none;
+  }
+
+  .funcionarios-tabela tr {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .funcionarios-tabela tr td {
+    width: 90%;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .funcionarios::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  .funcionarios::-webkit-scrollbar-thumb {
+    background: white;
+    height: 20px;
+  }
+
+  button{
+    border-radius: 0;
+    background-color: #2f4d6e;
+    color: white;
+    font-size: bold;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    margin: 0 10px 0 10px;
+  }
+
+  button:hover{
+    background-color: #4878af;
+
+  }
+
+
+  
+
+  .modal1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal1-content {
+    background: rgba(0,0,0,.5);
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .modal1-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+   
+  }
+  
+  .modal1-buttons button {
+    margin-left: 10px;
+    
+  }
+
+  .modal1 input {
+    background-color: rgba(37, 27, 65, 0.473);
+    color: white;
+    border: none;
+  }
+  
+  .close1 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+   margin-left: 390px;
+   margin-top: -10px;
+
+  }
+  
+  .close1:hover {
+    color: #7e2d2d;
+  }
+
+
+
+
+  .modal2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal2-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .modal2-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    
+  }
+  
+  .modal2-buttons button {
+    margin-left: 10px;
+    width: 100px;
+    height: 25px;
+    border: none;
+    border-radius: 0;
+    font-size: bold;
+  }
+  
+  .modal2 input {
+    background-color: rgba(37, 27, 65, 0.473);
+    color: white;
+    border: none;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .btnVerDesativados {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    border-radius: 2px;
+    cursor: pointer;
+    border:#141e30
+  }
+  
+  .modal3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.26);
+  }
+  
+  .modal3-content {
+    background: linear-gradient(#141e30, #243b55);
+    padding: 20px;
+    border-radius: 5px;
+    width: 70%;
+    text-align: center;
+    color: #fff;
+    border: #141e30 5px solid;
+    
+  }
+
+  .modal3 input {
+    background-color: rgba(37, 27, 65, 0.473);
+    color: white;
+    border: none;
+  }
+  
+  .close3 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 14.8%;
+    margin-top: -10px;
+
+  }
+  
+  .close3:hover {
+    color: #7e2d2d;
+  }
+
+
+
+  .funcionariosD-tabela{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .funcionariosD-tabela .cabecalhoD {
+    background: linear-gradient(#141e30, #243b55);
+    color: #fff;
+    text-align: center;
+    height: 40px;
+    width: 89.7%;
+    display: flex;
+    margin-right: 1px;
+  }
+ 
+  .funcionariosD-tabela .cabecalhoD p {
+    margin-top: -0.5px;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    font-size: 14px;
+    height: 20px;
+    width: 90%;
+  }
+
+  .funcionariosD-tabela .cabecalhoD p:first-child {
+    margin: -0.5px 0 0 -0.9px;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    font-size: 14px;
+    height: 20px;
+    width: 90%;
+  }
+  .funcionariosD-tabela .funcionariosD{
+    overflow: hidden;
+    height: 505px;
+    overflow-y: scroll;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: -1px;
+  }
+  
+  .funcionariosD-table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: transparent;
+    color: #ffffff;
+    border:none;
+  }
+
+  .funcionariosD-tabela tr {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .funcionariosD-tabela tr td {
+    width: 90%;
+    border: 1px solid #cccccc44;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .funcionariosD::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  .funcionariosD::-webkit-scrollbar-thumb {
+    background: white;
+    height: 20px;
+  }
+
+  button{
+    border-radius: 0;
+    background-color: #2f4d6e;
+    color: white;
+    font-size: bold;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    margin: 0 10px 0 10px;
+  }
+
+  button:hover{
+    background-color: #4878af;
+
+  }

@@ -1,0 +1,94 @@
+create database tcc_vue;
+
+use tcc_vue;
+
+create table clientes(
+	cli_codigo int not null primary key auto_increment,
+    cli_nome varchar(100),
+    cli_cpf varchar(14) unique,
+    cli_tel varchar(19),
+    cli_status varchar(20)
+);
+
+create table funcionarios(
+	funci_codigo int not null primary key auto_increment,
+    funci_nome varchar(100),
+    funci_senha varchar(20),
+    funci_status varchar(20)
+);
+
+create table brinquedos(
+	car_codigo int not null primary key auto_increment,
+    car_modelo varchar(50),
+    car_tipo varchar(50),
+    car_cor varchar(15),
+    car_status varchar(20)
+);
+
+create table historico(
+	hist_codigo int not null primary key auto_increment,
+    hist_usuario varchar(50),
+	hist_data timestamp default current_timestamp,
+    hist_descricao varchar(100),
+    hist_status varchar(20)
+);
+
+create table planos(
+	plano_codigo int not null primary key auto_increment, 
+	plano_nome varchar(50),
+    plano_tempo float,
+    plano_valor float,
+    plano_status varchar(20)
+);
+
+create table recebimentos(
+	receb_codigo int not null primary key auto_increment, 
+    funci_fk_receb varchar(100),
+    cli_fk_receb int,
+    foreign key (cli_fk_receb) references clientes (cli_codigo),
+    receb_pagamento_tipo varchar(20),
+    receb_valor float,
+    receb_status varchar(20),
+    receb_data timestamp default current_timestamp
+);
+
+create table alugueis(
+	alug_codigo int not null primary key auto_increment,
+    funci_fk_alug int,
+    foreign key (funci_fk_alug) references funcionarios (funci_codigo),
+    cli_fk_alug int,
+    foreign key (cli_fk_alug) references clientes (cli_codigo),
+    car_fk_alug int,
+    foreign key (car_fk_alug) references brinquedos (car_codigo),
+    alug_tempo float,
+    plano_fk_alug int,
+    foreign key (plano_fk_alug) references planos (plano_codigo),
+    alug_valor float,
+    alug_status varchar(20)
+);
+
+create table formas_pag(
+	formpag_codigo int not null primary key auto_increment,
+    formpag_nome varchar(20),
+    formpag_status varchar(20)
+);
+
+select * from alugueis;
+select * from clientes;
+select * from funcionarios;
+select * from brinquedos;
+select * from planos;
+select * from historico;
+select * from recebimentos;
+
+create trigger Tgr_Brinquedo_Status_Andamento_Insert after Insert
+on alugueis
+for each row
+update brinquedos set car_status = 'Ocupado'
+where car_codigo = new.car_fk_alug;
+
+create trigger Tgr_Brinquedo_Status_Update after update
+on alugueis
+for each row
+update brinquedos set car_status = 'Livre'
+where car_codigo = new.car_fk_alug and new.alug_status = 'Finalizado';
